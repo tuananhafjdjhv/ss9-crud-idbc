@@ -7,16 +7,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UserServiceIMPL implements IUserService{
-    private String jdbcURL = "jdbc:mysql://localhost:3306/demo";
+    private static final String DRIVER = "com.mysql.cj.jdbc.Driver";
+    private String jdbcURL = "jdbc:mysql://localhost:3306/store_procedure";
     private String jdbcUsername = "root";
-    private String jdbcPassword = "Minhtri29092014";
+    private String jdbcPassword = "123456789";
 
-    private static final String INSERT_USERS_SQL = "INSERT INTO user" + "  (name, email, country) VALUES " +
+    private static final String INSERT_USERS_SQL = "INSERT INTO users" + "  (name, email, country) VALUES " +
             " (?, ?, ?);";
 
-    private static final String SELECT_USER_BY_ID = "select id,name,email,country from user where id =?";
-    private static final String SELECT_ALL_USERS = "select * from user";
-    private static final String DELETE_USERS_SQL = "delete from user where id = ?;";
+    private static final String SELECT_USER_BY_ID = "select id,name,email,country from users where id =?";
+    private static final String SELECT_ALL_USERS = "select * from users";
+    private static final String DELETE_USERS_SQL = "delete from users where id = ?;";
     private static final String UPDATE_USERS_SQL = "update user set name = ?,email= ?, country =? where id = ?;";
 
     public UserServiceIMPL() {
@@ -25,7 +26,7 @@ public class UserServiceIMPL implements IUserService{
     protected Connection getConnection() {
         Connection connection = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            Class.forName(DRIVER);
             connection = DriverManager.getConnection(jdbcURL, jdbcUsername, jdbcPassword);
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -104,7 +105,8 @@ public class UserServiceIMPL implements IUserService{
 
     public boolean deleteUser(int id) throws SQLException {
         boolean rowDeleted;
-        try (Connection connection = getConnection(); PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);) {
+        try (Connection connection = getConnection();
+             PreparedStatement statement = connection.prepareStatement(DELETE_USERS_SQL);) {
             statement.setInt(1, id);
             rowDeleted = statement.executeUpdate() > 0;
         }

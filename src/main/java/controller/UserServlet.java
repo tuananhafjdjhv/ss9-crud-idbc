@@ -64,6 +64,7 @@ public class UserServlet extends HttpServlet {
             switch (action) {
                 case "create":
                     insertUser(req, resp);
+                    listUser(req,resp);
                     break;
                 case "edit":
                     updateUser(req, resp);
@@ -118,8 +119,8 @@ public class UserServlet extends HttpServlet {
 
         User book = new User(id, name, email, country);
         userService.updateUser(book);
-        RequestDispatcher dispatcher = request.getRequestDispatcher("user/edit.jsp");
-        dispatcher.forward(request, response);
+        request.getRequestDispatcher("user/edit.jsp").forward(request,response);
+        insertUser(request,response);
     }
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response)
@@ -131,8 +132,5 @@ public class UserServlet extends HttpServlet {
         request.setAttribute("listUser", listUser);
         RequestDispatcher dispatcher = request.getRequestDispatcher("user/list.jsp");
         dispatcher.forward(request, response);
-    }
-
-    public void destroy() {
     }
 }
